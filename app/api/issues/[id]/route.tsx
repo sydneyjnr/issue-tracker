@@ -50,7 +50,6 @@ export const DELETE = async (
   const { id } = await params;
   const issueId = Number(id);
 
-
 const issue = await prisma.issue.findUnique({
     where: { id: issueId },
   });
@@ -65,3 +64,5 @@ const issue = await prisma.issue.findUnique({
 
   return NextResponse.json({});
 }
+
+
