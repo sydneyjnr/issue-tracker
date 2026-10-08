@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import NavBar from "./NavBar";
-import AuthProvider from "./SessionProvider";
+import AuthProvider from "./auth/SessionProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 

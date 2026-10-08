@@ -1,11 +1,18 @@
+import authOptions from "@/app/auth/authOptions";
 import { issueSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PATCH = async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) => {
+
+  const session =await getServerSession(authOptions);
+if (!session)
+  return NextResponse.json({}, { status: 401 })
+
   const { id } = await params;
   const issueId = Number(id);
 
@@ -47,6 +54,11 @@ export const DELETE = async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) => {
+
+const session =await getServerSession(authOptions);
+if (!session)
+  return NextResponse.json({}, { status: 401 })
+
   const { id } = await params;
   const issueId = Number(id);
 
