@@ -28,7 +28,7 @@ export const PATCH = async (
     );
   }
 
-  const { assignedToUserId, title, description } = body;
+  const { assignedToUserId, title, description } = validation.data;
 
   if (assignedToUserId) {
     const user = await prisma.user.findUnique({
@@ -46,16 +46,26 @@ export const PATCH = async (
     return NextResponse.json({ error: "Issue not found" }, { status: 404 });
   }
 
+try {
   const updatedIssue = await prisma.issue.update({
     where: { id: issueId },
     data: {
       title,
       description,
-      assignedToUserId
+      assignedToUserId,
     },
   });
 
   return NextResponse.json(updatedIssue);
+} catch (error) {
+  console.error("PATCH update failed:", error);
+
+  return NextResponse.json(
+    { error: "Failed to update issue" },
+    { status: 500 },
+  );
+}
+
 };
 
 export const DELETE = async (

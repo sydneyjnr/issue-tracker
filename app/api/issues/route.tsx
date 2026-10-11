@@ -21,7 +21,7 @@ if (!session)
   const newIssue = await prisma.issue.create({
     data: {
       title: validation.data.title,
-      description: validation.data.description,
+      description: validation.data.description ?? "",
     },
   });
   return NextResponse.json(newIssue, { status: 201 });
