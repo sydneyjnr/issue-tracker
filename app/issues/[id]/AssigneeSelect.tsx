@@ -5,29 +5,19 @@ import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import React, { useEffect, useState } from "react";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   const {
     data: users,
     error,
     isLoading,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 60 * 1000,
-    retry: 3,
-  });
+  } = useUsers();
 
   if (isLoading) return <Skeleton />;
 
   if (error) return null;
 
-  return (
-    <>
-      <Select.Root
-        defaultValue={issue.assignedToUserId || ""}
-        onValueChange={async (userId) => {
+  const assignIssue = async (userId: string) => {
           try {
             await axios.patch("/api/issues/" + issue.id, {
               assignedToUserId: userId || null,
@@ -35,7 +25,13 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
           } catch (error) {
             toast.error("Changes could not be saved.");
           }
-        }}
+        }
+
+  return (
+    <>
+      <Select.Root
+        defaultValue={issue.assignedToUserId || ""}
+        onValueChange={assignIssue}
       >
         <Select.Trigger />
         <Select.Content>
@@ -54,5 +50,12 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     </>
   );
 };
+
+const useUsers = () => useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 60 * 1000,
+    retry: 3,
+  });
 
 export default AssigneeSelect;
