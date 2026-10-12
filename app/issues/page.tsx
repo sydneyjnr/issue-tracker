@@ -6,6 +6,7 @@ import NextLink from "next/link";
 import { Issue, Status } from "@prisma/client";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 import Pagination from "../components/Pagination";
+import { Metadata } from "next";
 
 const IssuesPage = async ({
   searchParams,
@@ -101,6 +102,11 @@ const IssuesPage = async ({
       <Pagination pageSize={pageSize} currentPage={page} itemCount={issueCount}/>
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: 'Issue Tracter-Issue List',
+  description: 'View all project issues'
 };
 
 export default IssuesPage;
